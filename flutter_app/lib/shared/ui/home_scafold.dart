@@ -20,10 +20,6 @@ class HomeScaffold extends HookWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.web), label: 'WebView'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
         ],
         onTap: (index) {
           currentIndex.value = index;
@@ -34,9 +30,6 @@ class HomeScaffold extends HookWidget {
               break;
             case 1:
               context.go('/webview');
-              break;
-            case 2:
-              context.go('/settings');
               break;
           }
         },

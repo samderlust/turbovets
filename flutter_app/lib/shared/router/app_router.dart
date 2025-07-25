@@ -36,11 +36,6 @@ final appRouter = GoRouter(
           name: 'web',
           builder: (context, state) => const SizedBox.shrink(),
         ),
-        GoRoute(
-          path: '/settings',
-          name: 'settings',
-          builder: (context, state) => const SizedBox.shrink(),
-        ),
       ],
       builder: (context, state, child) {
         return HomeScaffold(child: child);

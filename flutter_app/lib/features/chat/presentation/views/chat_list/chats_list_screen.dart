@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../shared/ui/theme_switcher.dart';
 import 'chat_list_view.dart';
 
 class ChatListScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class ChatListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Chats'),
         centerTitle: false,
-        actions: [Switch(value: true, onChanged: (_) {})],
+        actions: [ThemeSwitcher()],
       ),
       body: ChatThreadsListView(),
       // floatingActionButton: FloatingActionButton(
