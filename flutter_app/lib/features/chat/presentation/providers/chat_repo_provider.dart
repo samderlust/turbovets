@@ -7,5 +7,6 @@ part 'chat_repo_provider.g.dart';
 
 @riverpod
 ChatRepoFacade chatRepo(Ref ref) {
+  ref.keepAlive();
   return ChatRepoImpl();
 }

@@ -9,7 +9,11 @@ class ChatListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Chats'), centerTitle: false),
+      appBar: AppBar(
+        title: const Text('Chats'),
+        centerTitle: false,
+        actions: [Switch(value: true, onChanged: (_) {})],
+      ),
       body: ChatThreadsListView(),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {

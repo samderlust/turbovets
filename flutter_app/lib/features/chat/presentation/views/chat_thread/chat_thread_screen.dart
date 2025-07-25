@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/features/chat/presentation/providers/chats_provider.dart';
-import 'package:flutter_app/features/chat/presentation/providers/user_provider.dart';
 import 'package:flutter_app/features/chat/presentation/view_models/message_view_models.dart';
+import 'package:flutter_app/features/chat/presentation/views/chat_thread/widgets/message_bubble.dart';
 import 'package:flutter_app/features/chat/presentation/views/chat_thread/widgets/message_input_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,6 +16,29 @@ class ChatThreadScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatThread = ref.watch(chatThreadByIdProvider(chatThreadId));
+
+    final scrollCtrl = useScrollController();
+
+    useEffect(() {
+      // check if scrollCtrl is attached the scrollview
+      // and data is ready, scroll to the bottom
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // if chatThread is not ready or scrollFirstTime is true, do nothing
+        if (!chatThread.hasValue) {
+          return;
+        }
+
+        if (scrollCtrl.hasClients) {
+          scrollCtrl.animateTo(
+            scrollCtrl.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+
+      return null;
+    }, [chatThread]);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,13 +66,26 @@ class ChatThreadScreen extends HookConsumerWidget {
             Expanded(
               child: chatThread.when(
                 data: (messages) {
-                  return ChatListView(messages: messages.values.toList());
+                  return ChatListView(
+                    messages: messages.values.toList(),
+                    scrollCtrl: scrollCtrl,
+                  );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => Center(child: Text('Error: $error')),
               ),
             ),
-            MessageInputWidget(threadId: chatThreadId),
+            const Divider(height: 0),
+            MessageInputWidget(
+              threadId: chatThreadId,
+              onPostSend: () {
+                // scrollCtrl.animateTo(
+                //   scrollCtrl.position.maxScrollExtent + 100,
+                //   duration: const Duration(milliseconds: 300),
+                //   curve: Curves.easeInOut,
+                // );
+              },
+            ),
           ],
         ),
       ),
@@ -58,65 +94,36 @@ class ChatThreadScreen extends HookConsumerWidget {
 }
 
 class ChatListView extends ConsumerWidget {
-  const ChatListView({super.key, required this.messages});
+  const ChatListView({
+    super.key,
+    required this.messages,
+
+    required this.scrollCtrl,
+  });
 
   final List<MessageViewModel> messages;
+  final ScrollController scrollCtrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final size = MediaQuery.sizeOf(context);
-
     return ListView.separated(
+      controller: scrollCtrl,
       padding: EdgeInsets.symmetric(horizontal: 10),
       separatorBuilder: (context, index) => const SizedBox(height: 10),
       itemCount: messages.length,
       itemBuilder: (context, index) {
-        final message = messages[index].message;
-        final isSender = message.sender.id == ref.watch(myUserProvider).id;
+        final message = messages[index];
 
-        return Container(
-          margin: EdgeInsets.only(
-            left: isSender ? size.width * 0.1 : 0,
-            right: isSender ? 0 : size.width * 0.1,
-          ),
-
-          alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-
-            children: [
-              if (!isSender)
-                CircleAvatar(
-                  radius: 15,
-                  backgroundImage: NetworkImage(message.sender.avatarUrl),
-                ),
-              const SizedBox(width: 8),
-              Flexible(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: colorScheme.primaryContainer,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [Text(message.text)],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              if (isSender)
-                CircleAvatar(
-                  radius: 15,
-                  backgroundImage: NetworkImage(message.sender.avatarUrl),
-                ),
-            ],
-          ),
+        return MessageBubble(
+          key: ValueKey(message.message.id),
+          onRetryMessage: () {
+            ref
+                .read(
+                  chatThreadByIdProvider(message.message.chatThreadId).notifier,
+                )
+                .sendMessage(message.message);
+          },
+          message: message,
         );
       },
     );
