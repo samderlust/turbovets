@@ -83,4 +83,10 @@ class ChatRepoImpl implements ChatRepoFacade {
     // TODO: implement createChatThread
     throw UnimplementedError();
   }
+
+  @override
+  Stream<ChatThread> getChatThreadStream() {
+    // TODO: implement getChatThreadStream
+    throw UnimplementedError();
+  }
 }

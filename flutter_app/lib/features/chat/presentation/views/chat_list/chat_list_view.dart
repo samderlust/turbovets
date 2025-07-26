@@ -15,57 +15,67 @@ class ChatThreadsListView extends HookConsumerWidget {
 
     return listState.when(
       data: (chats) {
-        return ListView.separated(
-          separatorBuilder: (context, index) => const Divider(height: 0),
-          itemCount: chats.length,
-          itemBuilder: (context, index) {
-            final chat = chats.values.elementAt(index);
-            return MaterialButton(
-              onPressed: () {
-                context.pushNamed(
-                  ChatThreadScreen.routeName,
-                  pathParameters: {'id': chat.id},
-                );
-              },
-
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundImage: CachedNetworkImageProvider(
-                      chat.lastMessage.sender.avatarUrl,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          chat.lastMessage.sender.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          chat.lastMessage.text,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          dateTimeFormatter.format(chat.lastMessage.timestamp),
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
+        return RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(chatsProvider);
           },
+          child: ListView.separated(
+            separatorBuilder: (context, index) => const Divider(height: 0),
+            itemCount: chats.length,
+            itemBuilder: (context, index) {
+              final chat = chats.values.elementAt(index);
+              return MaterialButton(
+                onPressed: () {
+                  context.pushNamed(
+                    ChatThreadScreen.routeName,
+                    pathParameters: {'id': chat.id},
+                  );
+                },
+
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 24,
+                      backgroundImage: CachedNetworkImageProvider(
+                        chat.lastMessage.sender.avatarUrl,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            chat.lastMessage.sender.name,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            chat.lastMessage.text,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            dateTimeFormatter.format(
+                              chat.lastMessage.timestamp,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),

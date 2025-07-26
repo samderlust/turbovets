@@ -11,7 +11,8 @@ import '../../../../dummy/dummy_data.dart';
 import '../../../../shared/constraints/hive_constraints.dart';
 
 final class HiveChatRepo implements ChatRepoFacade {
-  final _streamController = StreamController<Message>.broadcast();
+  final _messageStreamCtrl = StreamController<Message>.broadcast();
+  final _threadStreamCtrl = StreamController<ChatThread>.broadcast();
 
   @override
   Future<Result<List<ChatThread>>> getChats() async {
@@ -26,7 +27,7 @@ final class HiveChatRepo implements ChatRepoFacade {
 
   @override
   Stream<Message> getMessageStream(String chatThreadId) {
-    return _streamController.stream.where((m) {
+    return _messageStreamCtrl.stream.where((m) {
       return m.chatThreadId == chatThreadId;
     });
   }
@@ -52,11 +53,11 @@ final class HiveChatRepo implements ChatRepoFacade {
       // update chat thread
       final threadBox = Hive.box<ChatThread>(HiveBoxes.chatThreads);
       final thread = threadBox.get(message.chatThreadId)!;
-      await threadBox.put(
-        message.chatThreadId,
-        thread.copyWith(lastMessage: message),
-      );
+      final updatedThread = thread.copyWith(lastMessage: message);
+
+      await threadBox.put(message.chatThreadId, updatedThread);
       await Future.delayed(const Duration(seconds: 1));
+      _threadStreamCtrl.add(updatedThread);
 
       Future.delayed(const Duration(seconds: 2), () {
         _broadcastMessage(message.chatThreadId);
@@ -91,9 +92,11 @@ final class HiveChatRepo implements ChatRepoFacade {
     final messageBox = Hive.box<Message>(HiveBoxes.messages);
     await messageBox.put(newMessage.id, newMessage);
 
-    await threadBox.put(chatThreadId, thread.copyWith(lastMessage: newMessage));
+    final updatedThread = thread.copyWith(lastMessage: newMessage);
+    await threadBox.put(chatThreadId, updatedThread);
 
-    _streamController.add(newMessage);
+    _messageStreamCtrl.add(newMessage);
+    _threadStreamCtrl.add(updatedThread);
   }
 
   @override
@@ -106,12 +109,19 @@ final class HiveChatRepo implements ChatRepoFacade {
       // create messagex
       final messageBox = Hive.box<Message>(HiveBoxes.messages);
       await messageBox.put(chatThread.lastMessage.id, chatThread.lastMessage);
+      _threadStreamCtrl.add(chatThread);
 
-      _broadcastMessage(chatThread.id);
-
+      Future.delayed(const Duration(seconds: 2), () {
+        _broadcastMessage(chatThread.id);
+      });
       return Result.value(null);
     } catch (e, st) {
       return Result.failed(e, st);
     }
+  }
+
+  @override
+  Stream<ChatThread> getChatThreadStream() {
+    return _threadStreamCtrl.stream;
   }
 }

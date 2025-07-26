@@ -13,6 +13,19 @@ class Chats extends _$Chats {
     final chatRepo = ref.read(chatRepoProvider);
     final resp = await chatRepo.getChats();
 
+    // listen to chat thread stream
+    final subscription = chatRepo.getChatThreadStream().listen((event) {
+      // remove the old value and update, so that the thread will move to the top
+      final data = state.asData?.value ?? {};
+      data.removeWhere((key, value) => key == event.id);
+
+      state = AsyncData({event.id: event, ...data});
+    });
+
+    ref.onDispose(() {
+      subscription.cancel();
+    });
+
     return resp.when(
       value: (value) {
         ref.keepAlive();
