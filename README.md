@@ -22,3 +22,5 @@ flutter pub get # to install dependencies
 dart run build_runner build --delete-conflicting-outputs # to generate code
 flutter run # to run the app
 ```
+
+Read more about mobile app in [`flutter_app/README.md`](/flutter_app/README.md)

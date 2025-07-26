@@ -7,7 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../providers/user_provider.dart';
+import '../../../../../user/presentation/providers/auth_user_provider.dart';
 
 class MessageInputWidget extends HookConsumerWidget {
   const MessageInputWidget({super.key, this.onSend});
@@ -157,7 +157,8 @@ class MessageInputWidget extends HookConsumerWidget {
                             ? null
                             : () async {
                               final messageText = textCtrl.text.trim();
-                              final currentUser = ref.read(myUserProvider);
+                              final currentUser =
+                                  ref.read(authUserProvider).value!;
                               final message = Message(
                                 id: uuid.v4(),
                                 text: messageText,

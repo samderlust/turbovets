@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/features/chat/presentation/view_models/message_view_models.dart';
 import 'package:flutter_app/features/chat/presentation/views/chat_thread/widgets/message_photo_previewer.dart';
+import 'package:flutter_app/features/user/presentation/providers/auth_user_provider.dart';
 import 'package:flutter_app/shared/formartters/time_formaters.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../providers/user_provider.dart';
 
 class MessageBubble extends ConsumerWidget {
   const MessageBubble({super.key, required this.message, this.onRetryMessage});
@@ -19,7 +18,8 @@ class MessageBubble extends ConsumerWidget {
     final theMessage = message.message;
 
     final status = message.status;
-    final isSender = theMessage.sender.id == ref.watch(myUserProvider).id;
+    final isSender =
+        theMessage.sender.id == ref.watch(authUserProvider).value!.id;
     return Container(
       margin: EdgeInsets.only(
         left: isSender ? size.width * 0.1 : 0,

@@ -25,6 +25,21 @@ flutter run
 ## App Structure
 
 This app follows clean architecture principles with a feature-based organization.
+each feature has its own folder with the following structure:
+
+```
+features/
+  feature_name/
+    data/
+      repo/ # data source implementations
+    domain/
+      entities/ # entities and models
+      repo/ # interfaces for data sources
+    presentation/
+      views/ # UI components
+      view_models/ # view models
+      providers/ # Riverpod providers
+```
 
 ## App Flow
 

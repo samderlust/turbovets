@@ -10,7 +10,6 @@ import '../../../../user/domain/entities/user.dart';
 import '../../../../user/presentation/providers/user_list_providers.dart';
 import '../../../domain/entities/chat_thread.dart';
 import '../../providers/chats_provider.dart';
-import '../../providers/user_provider.dart';
 import '../chat_thread/chat_thread_screen.dart';
 
 Future<void> showCreateNewChatDialog(BuildContext context) {
