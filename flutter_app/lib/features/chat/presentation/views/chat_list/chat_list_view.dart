@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../providers/chats_provider.dart';
+import '../new_chat/new_chat_dialog.dart';
 
 class ChatThreadsListView extends HookConsumerWidget {
   const ChatThreadsListView({super.key});
@@ -15,6 +16,33 @@ class ChatThreadsListView extends HookConsumerWidget {
 
     return listState.when(
       data: (chats) {
+        if (chats.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              spacing: 10,
+              children: [
+                Text(
+                  'No chats found',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showCreateNewChatDialog(context);
+                  },
+                  child: Text(
+                    'Create new chat',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
         return RefreshIndicator(
           onRefresh: () async {
             ref.invalidate(chatsProvider);

@@ -19,7 +19,6 @@ void main() async {
   await Hive.initFlutter();
 
   await _registerHiveAdapters();
-  // await Hive.deleteFromDisk();
 
   await _initDummyDataToHive();
 
@@ -36,6 +35,7 @@ class MainApp extends ConsumerWidget {
     final themeMode = ref.watch(themeSwicherProvider);
     return MaterialApp.router(
       title: 'TurboVest',
+      debugShowCheckedModeBanner: false,
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
@@ -65,6 +65,8 @@ Future<void> _registerHiveAdapters() async {
   await Hive.openBox<User>(HiveBoxes.users);
   await Hive.openBox<ChatThread>(HiveBoxes.chatThreads);
   await Hive.openBox<Message>(HiveBoxes.messages);
+
+  // Hive.box<ChatThread>(HiveBoxes.chatThreads).clear();
 }
 
 Future<void> _initDummyDataToHive() async {
