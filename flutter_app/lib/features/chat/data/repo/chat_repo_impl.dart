@@ -77,4 +77,10 @@ class ChatRepoImpl implements ChatRepoFacade {
       return m.chatThreadId == chatThreadId;
     });
   }
+
+  @override
+  Future<Result<void>> createChatThread(ChatThread chatThread) {
+    // TODO: implement createChatThread
+    throw UnimplementedError();
+  }
 }

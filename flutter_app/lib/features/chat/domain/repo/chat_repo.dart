@@ -17,4 +17,7 @@ abstract interface class ChatRepoFacade {
   ///
   /// when ever other participant send a message, it will be emitted
   Stream<Message> getMessageStream(String chatThreadId);
+
+  /// Create a new chat thread
+  Future<Result<void>> createChatThread(ChatThread chatThread);
 }

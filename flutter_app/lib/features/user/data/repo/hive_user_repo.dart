@@ -10,7 +10,7 @@ final class HiveUserRepo implements UserRepoFacade {
   @override
   Future<Result<User>> getAuthUser() async {
     try {
-      final box = await Hive.openBox<User>(HiveBoxes.users);
+      final box = Hive.box<User>(HiveBoxes.users);
       final user = box.get(authUser.id);
       return Result.value(user!);
     } catch (e, st) {
@@ -21,9 +21,9 @@ final class HiveUserRepo implements UserRepoFacade {
   @override
   Future<Result<List<User>>> getUsers() async {
     try {
-      final box = await Hive.openBox<User>(HiveBoxes.users);
+      final box = Hive.box<User>(HiveBoxes.users);
       final users = box.values.toList();
-      return Result.value(users);
+      return Result.value(users.where((u) => u.id != authUser.id).toList());
     } catch (e, st) {
       return Result.failed(e, st);
     }

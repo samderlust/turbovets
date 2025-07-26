@@ -7,18 +7,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../providers/chat_thread_by_id_provider.dart';
 import '../../../providers/user_provider.dart';
 
 class MessageInputWidget extends HookConsumerWidget {
-  const MessageInputWidget({
-    super.key,
-    required this.threadId,
-    this.onPostSend,
-  });
+  const MessageInputWidget({super.key, this.onSend});
 
-  final String threadId;
-  final VoidCallback? onPostSend;
+  final Function(Message)? onSend;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -168,23 +162,18 @@ class MessageInputWidget extends HookConsumerWidget {
                                 id: uuid.v4(),
                                 text: messageText,
                                 sender: currentUser,
-                                chatThreadId: threadId,
+                                chatThreadId: '',
                                 timestamp: DateTime.now(),
                                 file:
                                     pickedFiles.value
                                         .map((e) => e.path)
                                         .toList(),
                               );
+
                               textCtrl.clear();
                               pickedFiles.value = [];
 
-                              ref
-                                  .read(
-                                    chatThreadByIdProvider(threadId).notifier,
-                                  )
-                                  .sendMessage(message);
-
-                              onPostSend?.call();
+                              onSend?.call(message);
                             },
                     icon: Icon(Icons.send),
                   );

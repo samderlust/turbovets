@@ -1,15 +1,16 @@
+import '''
+package:flutter_app/features/core/domain/entities/result.dart''';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/domain/entities/result.dart';
 import '../../domain/entities/user.dart';
 import 'user_repo_provider.dart';
 
-part 'auth_user_provider.g.dart';
+part 'user_list_providers.g.dart';
 
 @riverpod
-Future<User> authUser(Ref ref) async {
-  final res = await ref.read(userRepoProvider).getAuthUser();
+Future<List<User>> userList(Ref ref) async {
+  final res = await ref.read(userRepoProvider).getUsers();
   return res.when(
     value: (value) {
       ref.keepAlive();

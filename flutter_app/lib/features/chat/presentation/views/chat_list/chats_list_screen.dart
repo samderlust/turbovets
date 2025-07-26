@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../shared/ui/theme_switcher.dart';
+import '../new_chat/new_chat_dialog.dart';
 import 'chat_list_view.dart';
 
 class ChatListScreen extends StatelessWidget {
@@ -16,15 +17,10 @@ class ChatListScreen extends StatelessWidget {
         actions: [ThemeSwitcher()],
       ),
       body: ChatThreadsListView(),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // Action for the button can be defined here
-      //     ScaffoldMessenger.of(context).showSnackBar(
-      //       const SnackBar(content: Text('Floating Action Button Pressed')),
-      //     );
-      //   },
-      //   child: const Icon(Icons.chat),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showCreateNewChatDialog(context),
+        child: const Icon(Icons.chat),
+      ),
     );
   }
 }

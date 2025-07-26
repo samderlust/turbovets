@@ -17,7 +17,9 @@ late SharedPreferences sharedPref;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+
   await _registerHiveAdapters();
+  // await Hive.deleteFromDisk();
 
   await _initDummyDataToHive();
 
@@ -59,6 +61,10 @@ Future<void> _registerHiveAdapters() async {
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(ChatThreadAdapter());
   Hive.registerAdapter(MessageAdapter());
+  // open all boxes
+  await Hive.openBox<User>(HiveBoxes.users);
+  await Hive.openBox<ChatThread>(HiveBoxes.chatThreads);
+  await Hive.openBox<Message>(HiveBoxes.messages);
 }
 
 Future<void> _initDummyDataToHive() async {

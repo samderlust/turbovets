@@ -77,13 +77,10 @@ class ChatThreadScreen extends HookConsumerWidget {
             ),
             const Divider(height: 0),
             MessageInputWidget(
-              threadId: chatThreadId,
-              onPostSend: () {
-                // scrollCtrl.animateTo(
-                //   scrollCtrl.position.maxScrollExtent + 100,
-                //   duration: const Duration(milliseconds: 300),
-                //   curve: Curves.easeInOut,
-                // );
+              onSend: (message) {
+                ref
+                    .read(chatThreadByIdProvider(chatThreadId).notifier)
+                    .sendMessage(message.copyWith(chatThreadId: chatThreadId));
               },
             ),
           ],

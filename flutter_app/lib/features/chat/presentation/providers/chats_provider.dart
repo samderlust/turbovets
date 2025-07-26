@@ -25,4 +25,19 @@ class Chats extends _$Chats {
   ChatThread? getChatOverviewById(String id) {
     return state.asData?.value[id];
   }
+
+  Future<bool> createChatThread(ChatThread chatThread) async {
+    final chatRepo = ref.read(chatRepoProvider);
+    final resp = await chatRepo.createChatThread(chatThread);
+
+    return resp.when(
+      value: (value) {
+        state = AsyncData({...state.asData!.value, chatThread.id: chatThread});
+        return true;
+      },
+      failed: (error, st) {
+        return false;
+      },
+    );
+  }
 }
