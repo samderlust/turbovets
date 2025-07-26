@@ -1,5 +1,23 @@
 # TurboVest Mobile App
 
+## Overview
+
+Mobile app using Hive for local storage and Riverpod for state management.
+
+1. **Chat Feature**
+
+- App will allow users to **create** multi-user chat threads
+- Users can send **text messages and photos**
+- Simulated**real-time updates** for new messages and chat threads (using streams)
+- **Auto-response** simulation for demo purposes
+- App also allow user to see **chat history**
+
+2. **Webview Feature**
+
+- App will embed a web view to display the Angular-based web application
+- Users can navigate between different web pages within the app
+- Web view will handle routing and navigation within the embedded web content
+
 ## How to run the app
 
 - Flutter version 3.29.0
