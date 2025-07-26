@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:faker/faker.dart';
-import 'package:flutter_app/features/chat/domain/entities/chat_overview.dart';
+import 'package:flutter_app/features/chat/domain/entities/chat_thread.dart';
 import 'package:flutter_app/features/chat/domain/entities/message.dart';
 import 'package:flutter_app/features/chat/domain/repo/chat_repo.dart';
 import 'package:flutter_app/features/core/domain/entities/result.dart';
@@ -58,7 +58,7 @@ class ChatRepoImpl implements ChatRepoFacade {
       id: faker.guid.guid(),
       text: faker.lorem.sentence(),
       sender: thread.participants
-          .where((p) => p.id != currentUser.id)
+          .where((p) => p.id != authUser.id)
           .elementAt(
             faker.randomGenerator.integer(thread.participants.length - 2),
           ),

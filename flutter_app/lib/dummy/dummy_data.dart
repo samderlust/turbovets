@@ -1,12 +1,13 @@
 import 'package:faker/faker.dart';
 
-import '../features/chat/domain/entities/chat_overview.dart';
+import '../features/chat/domain/entities/chat_thread.dart';
 import '../features/chat/domain/entities/message.dart';
+import '../features/user/domain/entities/user.dart';
 
 final faker = Faker();
 
-final currentUser = User(
-  id: faker.guid.guid(),
+final authUser = User(
+  id: 'auth_user_123_098',
   name: "Sam",
   avatarUrl: faker.image.loremPicsum(seed: "avatar, person", random: 83123123),
 );
@@ -29,7 +30,7 @@ final fakeChatThreads = faker.randomGenerator.amount(
       (_) => fakeUsers[faker.randomGenerator.integer(fakeUsers.length)],
       4,
       min: 1,
-    )..add(currentUser);
+    )..add(authUser);
 
     return ChatThread(
       id: faker.guid.guid(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/features/chat/presentation/views/chat_list/chats_list_screen.dart';
 import 'package:flutter_app/shared/ui/home_scafold.dart';
+import 'package:flutter_app/shared/ui/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/chat/presentation/views/chat_thread/chat_thread_screen.dart';
@@ -11,7 +12,7 @@ final shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/splash',
   routes: [
     ShellRoute(
       navigatorKey: shellNavigatorKey,
@@ -41,6 +42,11 @@ final appRouter = GoRouter(
       builder: (context, state, child) {
         return HomeScaffold(child: child);
       },
+    ),
+    GoRoute(
+      path: '/splash',
+      name: SplashScreen.routeName,
+      builder: (context, state) => const SplashScreen(),
     ),
   ],
 );

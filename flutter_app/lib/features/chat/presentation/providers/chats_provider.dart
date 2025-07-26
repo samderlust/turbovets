@@ -1,4 +1,4 @@
-import 'package:flutter_app/features/chat/domain/entities/chat_overview.dart';
+import 'package:flutter_app/features/chat/domain/entities/chat_thread.dart';
 import 'package:flutter_app/features/core/domain/entities/result.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

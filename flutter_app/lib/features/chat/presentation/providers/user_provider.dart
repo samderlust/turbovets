@@ -2,12 +2,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../dummy/dummy_data.dart';
-import '../../domain/entities/chat_overview.dart';
+import '../../../user/domain/entities/user.dart';
 
 part 'user_provider.g.dart';
 
 @riverpod
 User myUser(Ref ref) {
   ref.keepAlive();
-  return currentUser;
+  return authUser;
 }

@@ -1,4 +1,4 @@
-import 'package:flutter_app/features/chat/domain/entities/chat_overview.dart';
+import 'package:flutter_app/features/chat/domain/entities/chat_thread.dart';
 import 'package:flutter_app/features/chat/domain/entities/message.dart';
 
 import '../../../core/domain/entities/result.dart';

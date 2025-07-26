@@ -1,4 +1,4 @@
-import '../../domain/entities/chat_overview.dart';
+import '../../domain/entities/chat_thread.dart';
 
 class ChatThreadViewModel {
   final ChatThread thread;
