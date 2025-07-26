@@ -17,6 +17,7 @@ late SharedPreferences sharedPref;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  await _registerHiveAdapters();
 
   await _initDummyDataToHive();
 
@@ -52,6 +53,12 @@ class MainApp extends ConsumerWidget {
       routerConfig: appRouter,
     );
   }
+}
+
+Future<void> _registerHiveAdapters() async {
+  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(ChatThreadAdapter());
+  Hive.registerAdapter(MessageAdapter());
 }
 
 Future<void> _initDummyDataToHive() async {
