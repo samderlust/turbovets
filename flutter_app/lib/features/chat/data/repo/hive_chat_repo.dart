@@ -19,7 +19,11 @@ final class HiveChatRepo implements ChatRepoFacade {
     try {
       final box = Hive.box<ChatThread>(HiveBoxes.chatThreads);
       final chats = box.values.toList();
-      return Result.value(chats);
+      return Result.value(
+        chats..sort(
+          (a, b) => b.lastMessage.timestamp.compareTo(a.lastMessage.timestamp),
+        ),
+      );
     } catch (e, st) {
       return Result.failed(e, st);
     }
@@ -37,7 +41,9 @@ final class HiveChatRepo implements ChatRepoFacade {
     try {
       final box = Hive.box<Message>(HiveBoxes.messages);
       final messages = box.values.where((m) => m.chatThreadId == chatThreadId);
-      return Result.value(messages.toList());
+      return Result.value(
+        messages.toList()..sort((a, b) => a.timestamp.compareTo(b.timestamp)),
+      );
     } catch (e, st) {
       return Result.failed(e, st);
     }

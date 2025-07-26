@@ -3,12 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-knowledgebase-editor',
+  selector: 'app-editor',
   imports: [FormsModule, CommonModule],
-  templateUrl: './knowledgebase-editor.html',
-  styleUrl: './knowledgebase-editor.css'
+  templateUrl: './editor.html',
+  styleUrl: './editor.css'
 })
-export class KnowledgebaseEditor {
+export class Editor {
   @ViewChild('editor') editor!: ElementRef<HTMLTextAreaElement>;
 
   protected readonly content = signal(`# Welcome to Knowledge Base

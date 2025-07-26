@@ -43,16 +43,15 @@ class ChatThreadById extends _$ChatThreadById {
   }
 
   Future<void> sendMessage(Message payload) async {
-    final messages = state.asData?.value ?? {};
-
     final message = MessageViewModel(
       message: payload,
       status: MessageStatus.sending,
     );
 
+    // Update state immediately with sending status
     state = AsyncData({
-      ...messages,
-      message.message.id: message.copyWith(status: MessageStatus.sending),
+      ...state.asData?.value ?? {},
+      message.message.id: message,
     });
 
     final chatRepo = ref.read(chatRepoProvider);
@@ -61,13 +60,13 @@ class ChatThreadById extends _$ChatThreadById {
     resp.when(
       value: (value) {
         state = AsyncData({
-          ...messages,
+          ...state.asData?.value ?? {},
           message.message.id: message.copyWith(status: MessageStatus.sent),
         });
       },
       failed: (error, st) {
         state = AsyncData({
-          ...messages,
+          ...state.asData?.value ?? {},
           message.message.id: message.copyWith(status: MessageStatus.failed),
         });
       },
