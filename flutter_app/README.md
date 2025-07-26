@@ -3,6 +3,7 @@
 ## Overview
 
 Mobile app using Hive for local storage and Riverpod for state management.
+App will **automatically generate randome message** every 30 seconds to a random chat thread and also **trigger notification**. To change the interval, you can modify the `Timer.periodic` call in the `HiveChatRepo` class(`hive_chat_repo.dart`).
 
 1. **Chat Feature**
 
@@ -17,6 +18,11 @@ Mobile app using Hive for local storage and Riverpod for state management.
 - App will embed a web view to display the Angular-based web application
 - Users can navigate between different web pages within the app
 - Web view will handle routing and navigation within the embedded web content
+
+3. **Local Notifications**
+
+- user must allow notification in order to receive notifications
+- App will send local notifications for new messages
 
 ## How to run the app
 

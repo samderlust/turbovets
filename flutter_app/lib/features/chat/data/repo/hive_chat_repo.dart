@@ -5,14 +5,39 @@ import 'package:flutter_app/features/chat/domain/entities/chat_thread.dart';
 import 'package:flutter_app/features/chat/domain/entities/message.dart';
 import 'package:flutter_app/features/chat/domain/repo/chat_repo.dart';
 import 'package:flutter_app/features/core/domain/entities/result.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'
+    as fln;
 import 'package:hive_ce/hive.dart';
 
 import '../../../../dummy/dummy_data.dart';
+import '../../../../main.dart';
 import '../../../../shared/constraints/hive_constraints.dart';
 
 final class HiveChatRepo implements ChatRepoFacade {
   final _messageStreamCtrl = StreamController<Message>.broadcast();
   final _threadStreamCtrl = StreamController<ChatThread>.broadcast();
+  Timer? _periodicTimer;
+
+  HiveChatRepo() {
+    log('init timer');
+
+    /// every 30 seconds, we will broadcast a new message to a random chat thread
+    /// and also trigger notification
+    _periodicTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      final threadBox = Hive.box<ChatThread>(HiveBoxes.chatThreads);
+      final threads = threadBox.values.toList();
+      if (threads.isNotEmpty) {
+        final thread = threads[faker.randomGenerator.integer(threads.length)];
+        _broadcastMessage(thread.id);
+      }
+    });
+  }
+
+  void dispose() {
+    _periodicTimer?.cancel();
+    _messageStreamCtrl.close();
+    _threadStreamCtrl.close();
+  }
 
   @override
   Future<Result<List<ChatThread>>> getChats() async {
@@ -62,6 +87,7 @@ final class HiveChatRepo implements ChatRepoFacade {
       final updatedThread = thread.copyWith(lastMessage: message);
 
       await threadBox.put(message.chatThreadId, updatedThread);
+
       await Future.delayed(const Duration(seconds: 1));
       _threadStreamCtrl.add(updatedThread);
 
@@ -103,6 +129,18 @@ final class HiveChatRepo implements ChatRepoFacade {
 
     _messageStreamCtrl.add(newMessage);
     _threadStreamCtrl.add(updatedThread);
+    flutterLocalNotificationsPlugin.show(
+      0,
+      'New Message',
+      newMessage.text,
+      fln.NotificationDetails(
+        android: fln.AndroidNotificationDetails(
+          chatThreadId,
+          "app_notification_channel",
+        ),
+      ),
+      payload: chatThreadId,
+    );
   }
 
   @override

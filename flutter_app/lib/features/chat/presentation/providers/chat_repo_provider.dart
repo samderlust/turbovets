@@ -8,7 +8,10 @@ part 'chat_repo_provider.g.dart';
 
 @riverpod
 ChatRepoFacade chatRepo(Ref ref) {
+  final repo = HiveChatRepo();
+  ref.onDispose(() {
+    repo.dispose();
+  });
   ref.keepAlive();
-  return HiveChatRepo();
-  // return ChatRepoImpl();
+  return repo;
 }
