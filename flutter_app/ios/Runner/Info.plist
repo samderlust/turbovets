@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Flutter App</string>
+	<string>TurboVest</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -51,5 +51,7 @@
 	<string>flutter_app needs access to your camera to take photos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>flutter_app needs access to your microphone to record audio.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app needs local network access for development and debugging purposes.</string>
 </dict>
 </plist>
