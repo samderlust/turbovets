@@ -19,10 +19,11 @@ App will **automatically generate randome message** every 30 seconds to a random
 - Users can navigate between different web pages within the app
 - Web view will handle routing and navigation within the embedded web content
 
-3. **Local Notifications**
+3. **Notifications**
 
 - user must allow notification in order to receive notifications
-- App will send local notifications for new messages
+- App will send notifications for new messages
+- This is just local notification (for demo purpose), no firebase or any other cloud service is used.
 
 ## How to run the app
 
