@@ -1,0 +1,62 @@
+<nav class="bg-blue-600 text-white p-4">
+    <div class="container mx-auto">
+        <div class="flex justify-between items-center">
+            <h1 class="text-xl font-bold">Support Dashboard</h1>
+
+            <!-- Mobile menu button -->
+            <button (click)="toggleMobileMenu()"
+                class="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1">
+                <span class="block w-6 h-0.5 bg-white transition-transform duration-300"
+                    [class.rotate-45]="isMobileMenuOpen()"
+                    [class.translate-y-2]="isMobileMenuOpen()"></span>
+                <span class="block w-6 h-0.5 bg-white transition-opacity duration-300"
+                    [class.opacity-0]="isMobileMenuOpen()"></span>
+                <span class="block w-6 h-0.5 bg-white transition-transform duration-300"
+                    [class.-rotate-45]="isMobileMenuOpen()"
+                    [class.-translate-y-2]="isMobileMenuOpen()"></span>
+            </button>
+
+            <!-- Desktop menu -->
+            <div class="hidden md:flex space-x-4">
+                <a routerLink="/tickets"
+                    routerLinkActive="bg-blue-800"
+                    class="px-3 py-2 rounded hover:bg-blue-700 transition-colors">
+                    Tickets
+                </a>
+                <a routerLink="/knowledgebase"
+                    routerLinkActive="bg-blue-800"
+                    class="px-3 py-2 rounded hover:bg-blue-700 transition-colors">
+                    Markdown Editor
+                </a>
+                <a routerLink="/logs"
+                    routerLinkActive="bg-blue-800"
+                    class="px-3 py-2 rounded hover:bg-blue-700 transition-colors">
+                    Live Logs
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="md:hidden mt-4 space-y-2 transition-all duration-300"
+            [class.hidden]="!isMobileMenuOpen()">
+            <a routerLink="/tickets"
+                routerLinkActive="bg-blue-800"
+                (click)="closeMobileMenu()"
+                class="block px-3 py-2 rounded hover:bg-blue-700 transition-colors">
+                Tickets
+            </a>
+            <a routerLink="/knowledgebase"
+                routerLinkActive="bg-blue-800"
+                (click)="closeMobileMenu()"
+                class="block px-3 py-2 rounded hover:bg-blue-700 transition-colors">
+                Markdown Editor
+            </a>
+            <a routerLink="/logs"
+                routerLinkActive="bg-blue-800"
+                (click)="closeMobileMenu()"
+                class="block px-3 py-2 rounded hover:bg-blue-700 transition-colors">
+                Live Logs
+            </a>
+        </div>
+    </div>
+</nav>

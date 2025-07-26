@@ -1,0 +1,34 @@
+<div class="container mx-auto p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold">Live Logs</h2>
+    <button 
+      (click)="clearLogs()"
+      class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+      Clear Logs
+    </button>
+  </div>
+
+  <div class="bg-black text-green-400 rounded-lg p-4 font-mono text-sm">
+    <div 
+      #logsContainer
+      class="h-96 overflow-y-auto space-y-1">
+      @for (log of logs(); track $index) {
+        <div class="flex items-start space-x-2">
+          <span class="text-gray-500">{{ log.timestamp | date:'HH:mm:ss' }}</span>
+          <span [class]="log.level === 'ERROR' ? 'text-red-400' : 
+                         log.level === 'WARN' ? 'text-yellow-400' : 
+                         'text-blue-400'"
+                class="font-bold min-w-[50px]">
+            [{{ log.level }}]
+          </span>
+          <span>{{ log.message }}</span>
+        </div>
+      }
+      @if (logs().length === 0) {
+        <div class="text-gray-500 text-center py-8">
+          No logs yet. Logs will appear automatically...
+        </div>
+      }
+    </div>
+  </div>
+</div>

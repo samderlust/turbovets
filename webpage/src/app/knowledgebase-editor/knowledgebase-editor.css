@@ -1,0 +1,12 @@
+/* Custom utilities for markdown editor */
+.editor-panel-vertical {
+  height: 30vh;
+}
+
+.editor-textarea-vertical {
+  height: calc(30vh - 3rem);
+}
+
+.editor-panel-horizontal {
+  width: 30%;
+}

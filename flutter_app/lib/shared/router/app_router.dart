@@ -4,6 +4,7 @@ import 'package:flutter_app/shared/ui/home_scafold.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/chat/presentation/views/chat_thread/chat_thread_screen.dart';
+import '../../features/webview/presentation/views/web_view_screen.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -33,8 +34,8 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: '/webview',
-          name: 'web',
-          builder: (context, state) => const SizedBox.shrink(),
+          name: WebViewScreen.routeName,
+          builder: (context, state) => const WebViewScreen(),
         ),
       ],
       builder: (context, state, child) {

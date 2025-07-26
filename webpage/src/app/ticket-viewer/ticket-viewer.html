@@ -1,0 +1,95 @@
+<div class="container mx-auto p-4 md:p-6">
+  <h2 class="text-xl md:text-2xl font-bold mb-4 md:mb-6">Support Tickets</h2>
+
+  <!-- Filters -->
+  <div class="mb-4 md:mb-6 flex flex-wrap gap-2">
+    <button (click)="setFilter('All')"
+      [class]="selectedFilter() === 'All' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'"
+      class="px-3 py-2 md:px-4 md:py-2 rounded text-sm md:text-base hover:bg-blue-500 hover:text-white transition-colors">
+      All
+    </button>
+    <button (click)="setFilter('Open')"
+      [class]="selectedFilter() === 'Open' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'"
+      class="px-3 py-2 md:px-4 md:py-2 rounded text-sm md:text-base hover:bg-blue-500 hover:text-white transition-colors">
+      Open
+    </button>
+    <button (click)="setFilter('In Progress')"
+      [class]="selectedFilter() === 'In Progress' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'"
+      class="px-3 py-2 md:px-4 md:py-2 rounded text-sm md:text-base hover:bg-blue-500 hover:text-white transition-colors">
+      In Progress
+    </button>
+    <button (click)="setFilter('Closed')"
+      [class]="selectedFilter() === 'Closed' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'"
+      class="px-3 py-2 md:px-4 md:py-2 rounded text-sm md:text-base hover:bg-blue-500 hover:text-white transition-colors">
+      Closed
+    </button>
+  </div>
+
+  <!-- Desktop Table -->
+  <div class="hidden md:block bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Subject</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created At</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        @for (ticket of filteredTickets(); track ticket.id) {
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4 text-sm text-gray-900">{{ ticket.id }}</td>
+          <td class="px-6 py-4 text-sm text-gray-900">{{ ticket.subject }}</td>
+          <td class="px-6 py-4">
+            <span [class]="ticket.status === 'Open' ? 'bg-red-100 text-red-800' : 
+                             ticket.status === 'In Progress' ? 'bg-yellow-100 text-yellow-800' : 
+                             'bg-green-100 text-green-800'"
+              class="px-2 py-1 text-xs font-medium rounded-full">
+              {{ ticket.status }}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-sm text-gray-500">{{ ticket.createdAt | date:'short' }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mobile Card Layout -->
+  <div class="md:hidden space-y-3">
+    @for (ticket of filteredTickets(); track ticket.id) {
+    <div class="bg-white rounded-lg shadow p-4 border">
+      <div class="flex justify-between items-start mb-2">
+        <div class="flex items-center space-x-2">
+          <span class="text-xs font-medium text-gray-500">ID:</span>
+          <span class="text-sm font-semibold text-gray-900">{{ ticket.id }}</span>
+        </div>
+        <span [class]="ticket.status === 'Open' ? 'bg-red-100 text-red-800' : 
+                         ticket.status === 'In Progress' ? 'bg-yellow-100 text-yellow-800' : 
+                         'bg-green-100 text-green-800'"
+          class="px-2 py-1 text-xs font-medium rounded-full">
+          {{ ticket.status }}
+        </span>
+      </div>
+
+      <div class="mb-3">
+        <h3 class="text-sm font-medium text-gray-900 leading-tight">{{ ticket.subject }}</h3>
+      </div>
+
+      <div class="flex justify-between items-center text-xs text-gray-500">
+        <span>Created:</span>
+        <span>{{ ticket.createdAt | date:'short' }}</span>
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Empty state -->
+  @if (filteredTickets().length === 0) {
+  <div class="bg-white rounded-lg shadow p-8 text-center">
+    <div class="text-gray-500 text-lg mb-2">No tickets found</div>
+    <div class="text-gray-400 text-sm">Try adjusting your filter selection</div>
+  </div>
+  }
+</div>

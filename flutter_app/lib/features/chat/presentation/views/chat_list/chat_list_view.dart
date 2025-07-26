@@ -19,7 +19,7 @@ class ChatThreadsListView extends HookConsumerWidget {
           separatorBuilder: (context, index) => const Divider(height: 0),
           itemCount: chats.length,
           itemBuilder: (context, index) {
-            final chat = chats[index];
+            final chat = chats.values.elementAt(index);
             return MaterialButton(
               onPressed: () {
                 context.pushNamed(
