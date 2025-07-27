@@ -153,7 +153,9 @@ class MessageInputWidget extends HookConsumerWidget {
                   return IconButton(
                     color: colorScheme.primary,
                     onPressed:
-                        value.text.trim().isEmpty && pickedFiles.value.isEmpty
+                        (value.text.trim().isEmpty &&
+                                    pickedFiles.value.isEmpty) ||
+                                onSend == null
                             ? null
                             : () async {
                               final messageText = textCtrl.text.trim();
@@ -174,7 +176,7 @@ class MessageInputWidget extends HookConsumerWidget {
                               textCtrl.clear();
                               pickedFiles.value = [];
 
-                              onSend?.call(message);
+                              onSend!.call(message);
                             },
                     icon: Icon(Icons.send),
                   );

@@ -65,8 +65,8 @@ class NewChatDialog extends HookConsumerWidget {
                           value: selectedUsers.value.contains(user),
                           onChanged: (value) {
                             if (selectedUsers.value.contains(user)) {
-                              selectedUsers.value =
-                                  selectedUsers.value..remove(user);
+                              selectedUsers.value = [...selectedUsers.value]
+                                ..remove(user);
                             } else {
                               selectedUsers.value = [
                                 ...selectedUsers.value,
@@ -95,36 +95,43 @@ class NewChatDialog extends HookConsumerWidget {
                 ),
               ),
               MessageInputWidget(
-                onSend: (message) async {
-                  final authUser = ref.read(authUserProvider).value!;
-                  final threadId = uuid.v4();
-                  final newMessage = message.copyWith(chatThreadId: threadId);
-                  final newThread = ChatThread(
-                    id: threadId,
-                    lastMessage: newMessage,
-                    participants: [...selectedUsers.value, authUser],
-                  );
+                onSend:
+                    selectedUsers.value.isEmpty
+                        ? null
+                        : (message) async {
+                          final authUser = ref.read(authUserProvider).value!;
+                          final threadId = uuid.v4();
+                          final newMessage = message.copyWith(
+                            chatThreadId: threadId,
+                          );
+                          final newThread = ChatThread(
+                            id: threadId,
+                            lastMessage: newMessage,
+                            participants: [...selectedUsers.value, authUser],
+                          );
 
-                  final res = await ref
-                      .read(chatsProvider.notifier)
-                      .createChatThread(newThread);
-                  if (!context.mounted) return;
-                  if (!res) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Failed to create chat')),
-                    );
-                  } else {
-                    // pop the dialog
-                    context.pop();
-                    // go to the chat thread screen
-                    context.pushNamed(
-                      ChatThreadScreen.routeName,
-                      pathParameters: {'id': threadId},
-                    );
-                  }
-                  // create new chat thread
-                  // send message
-                },
+                          final res = await ref
+                              .read(chatsProvider.notifier)
+                              .createChatThread(newThread);
+                          if (!context.mounted) return;
+                          if (!res) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Failed to create chat'),
+                              ),
+                            );
+                          } else {
+                            // pop the dialog
+                            context.pop();
+                            // go to the chat thread screen
+                            context.pushNamed(
+                              ChatThreadScreen.routeName,
+                              pathParameters: {'id': threadId},
+                            );
+                          }
+                          // create new chat thread
+                          // send message
+                        },
               ),
             ],
           ),
